@@ -1,24 +1,32 @@
-const request = require('supertest');
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/userRoutes.js";
+import { errorHandler } from "./middleware/errorMiddleware.js";
 
-describe('POST /api/auth/register', () => {
-  it('should register a new user', async () => {
-    const res = await request(app).post('/api/auth/register').send({
-      name: 'Richard',
-      email: 'richard@example.com',
-      password: 'securepass',
-      role: 'farmer'
-    });
-    expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('token');
-  });
+dotenv.config();
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Connect to MongoDB
+connectDB();
+
+// Routes
+app.use("/api/users", userRoutes);
+
+// Root route
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
 
-const express = require('express');
-const app = express();
-const authRoutes = require('./routes/auth'); // ✅ adjust if needed
+// Error handler middleware
+app.use(errorHandler);
 
-app.use(express.json());
-app.use('/api/auth', authRoutes);
-
-module.exports = app; // ✅ export the app for testing
-
+// Server listen
+import request from "supertest";
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
