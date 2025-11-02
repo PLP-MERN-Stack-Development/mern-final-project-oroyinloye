@@ -16,3 +16,6 @@ mongoose.connect(process.env.MONGO_URI)
 app.listen(50000, () => {
   console.log('Server is running on port 50000');
 });
+
+console.log('Current directory:', __dirname);
+console.log('Environment Variables:', process.env);
