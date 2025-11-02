@@ -1,32 +1,30 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import connectDB from "./config/db.js";
-import userRoutes from "./routes/userRoutes.js";
-import { errorHandler } from "./middleware/errorMiddleware.js";
+// server.js
 
+import dotenv from 'dotenv';
 dotenv.config();
-const app = express();
+const express = require('express');
+const mongoose = require('mongoose');
 
-// Middleware
-app.use(cors());
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Connect to MongoDB Atlas
+mongoose.connect('mongodb+srv://oroyinloye:Acegid@321@cluster0.xxxxx.mongodb.net/AgroConnect?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch((err) => console.error('Failed to connect:', err));
+
+// Middleware (e.g., body-parser)
 app.use(express.json());
 
-// Connect to MongoDB
-connectDB();
-
-// Routes
-app.use("/api/users", userRoutes);
-
-// Root route
-app.get("/", (req, res) => {
-  res.send("API is running...");
+// Define routes
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
 });
 
-// Error handler middleware
-app.use(errorHandler);
-
-// Server listen
-import request from "supertest";
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
