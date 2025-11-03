@@ -17,6 +17,8 @@ app.use('/api/auth', authRoutes);
 app.get('/', (req, res) => {
   res.send('AgroConnect backend is live!');
 });
+const cors = require('cors');
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
