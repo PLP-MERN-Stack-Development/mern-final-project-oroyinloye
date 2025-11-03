@@ -1,7 +1,15 @@
 const dotenv = require('dotenv');
 dotenv.config(); // Load environment variables from .env
 
+const authRoutes = require('./routes/authRoutes');
+app.use(express.json()); // to parse JSON bodies
+app.use('/api/auth', authRoutes);
+
 console.log('MONGO_URI:', process.env.MONGO_URI); // ← Add this line to debug
+
+const authRoutes = require('./routes/authRoutes');
+app.use(express.json()); // to parse JSON bodies
+app.use('/api/auth', authRoutes);
 
 const mongoose = require('mongoose');
 const express = require('express');
