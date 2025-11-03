@@ -18,6 +18,12 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Start the server
 const PORT = process.env.PORT || 5000;
+app.get('/api/users', (req, res) => {
+  res.json([
+    { id: 1, name: 'Richard', role: 'Farmer' },
+    { id: 2, name: 'Ada', role: 'Buyer' }
+  ]);
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
