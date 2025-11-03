@@ -13,14 +13,12 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.log('Failed to connect:', err));
 
 // Start the server
-app.listen(50000, () => {
-  console.log('Server is running on port 50000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 console.log('Current directory:', __dirname);
 console.log('Environment Variables:', process.env);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
