@@ -7,6 +7,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 
+app.get('/', (req, res) => {
+  res.send('AgroConnect backend is live!');
+});
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
