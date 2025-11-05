@@ -5,24 +5,27 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-// Load environment variables from .env file
 dotenv.config();
-
 const app = express();
 
-// ✅ Middleware to parse JSON
+// ✅ CORS: Allow both localhost and Netlify frontend
+const allowedOrigins = ['http://localhost:3000', 'https://agroconnect-frontend.netlify.app'];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
-
-// ✅ CORS setup for local and deployed frontend
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://agroconnect-frontend.netlify.app'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true
-}));
-
-// ✅ Optional: Handle preflight requests globally
-app.options('*', cors());
 
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -32,15 +35,12 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ MongoDB connected'))
 .catch((err) => console.error('❌ MongoDB connection error:', err));
 
-// ✅ Sample register route
+// ✅ Sample route
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
-
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required' });
   }
-
-  // Placeholder logic — replace with real user creation
   console.log('📥 Registering user:', { name, email });
   return res.status(201).json({ message: 'User registered successfully (placeholder)' });
 });
