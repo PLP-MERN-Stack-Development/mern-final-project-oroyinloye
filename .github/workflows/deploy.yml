@@ -28,3 +28,6 @@ jobs:
           cd server
           npm install
           npm test
+           - name: Trigger Netlify Deployment
+        run: |
+          curl -X POST -d '{}' https://api.netlify.com/build_hooks/YOUR_BUILD_HOOK_ID
