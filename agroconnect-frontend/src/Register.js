@@ -33,3 +33,4 @@ function Register() {
   );
 }
 export default Register;
+import Register from './components/Register';

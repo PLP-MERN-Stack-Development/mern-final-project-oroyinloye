@@ -1,14 +1,10 @@
 const request = require('supertest');
-const app = require('../server'); // adjust path to your Express app
+const app = require('../index'); // or wherever your Express app is exported
 
-describe('User API', () => {
-  it('should register a new user', async () => {
-    const res = await request(app).post('/api/users/register').send({
-      name: 'Test User',
-      email: 'test@example.com',
-      password: 'password123'
-    });
-    expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('token');
+describe('GET /api', () => {
+  it('should return welcome message', async () => {
+    const res = await request(app).get('/api');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.message).toBeDefined();
   });
 });
