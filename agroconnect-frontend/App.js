@@ -9,3 +9,5 @@ function App() {
 }
 
 export default App;
+const morgan = require('morgan');
+app.use(morgan('dev'));
