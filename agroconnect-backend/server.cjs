@@ -1,17 +1,5 @@
 // server.js
-const express = require('express');
-const cors = require('cors');
-const app = express();
 
-// ✅ CORS configuration
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://agroconnect-frontend.netlify.app'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true
-}));
-
-app.use(express.json());
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -22,12 +10,9 @@ dotenv.config();
 
 const app = express();
 
-// ✅ CORS setup for local and deployed frontend
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://agroconnect-frontend.netlify.app'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+// ✅ CORS setup for both local and deployed frontend
+app.use(cors());
+app.options('*', cors()); // Handle preflight requests
 
 // ✅ Middleware
 app.use(express.json());
@@ -44,13 +29,12 @@ mongoose.connect(process.env.MONGO_URI, {
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Basic validation
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  // TODO: Add logic to check if user exists, hash password, save to DB
-  return res.status(201).json({ message: 'User registered successfully (placeholder)' });
+  // Placeholder response
+  return res.status(201).json({ message: 'User registered successfully' });
 });
 
 // ✅ Root route
