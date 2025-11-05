@@ -13,12 +13,12 @@ function Register() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-     const res = await fetch('http://localhost:5000/api/auth/register', {
+     fetch('https://mern-final-project-oroyinloye.onrender.com/api/register', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(formData)
+  body: JSON.stringify({ name, email, password })
 });
-    const data = await res.json();
+const data = await res.json();
     console.log('Register response:', data);
   };
 
@@ -33,4 +33,3 @@ function Register() {
   );
 }
 export default Register;
-import Register from './components/Register';

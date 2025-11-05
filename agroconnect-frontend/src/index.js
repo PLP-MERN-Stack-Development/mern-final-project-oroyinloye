@@ -16,4 +16,4 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 import LogRocket from 'logrocket';
-LogRocket.init('your-app-id');
+LogRocket.init('vauzkz/agroconnect');
