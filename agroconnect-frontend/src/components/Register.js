@@ -1,35 +1,70 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function Register() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
+const Register = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-     fetch('https://mern-final-project-oroyinloye.onrender.com/api/register', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name, email, password })
-});
-const data = await res.json();
-    console.log('Register response:', data);
+
+    try {
+      const response = await fetch('https://mern-final-project-oroyinloye.onrender.com/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage('✅ Registration successful!');
+        setName('');
+        setEmail('');
+        setPassword('');
+      } else {
+        setMessage(`❌ Error: ${data.message || 'Registration failed'}`);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      setMessage('❌ Network error. Please try again later.');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
       <h2>Register</h2>
-      <input name="name" placeholder="Name" onChange={handleChange} />
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Register</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
+        />
+        <button type="submit" style={{ padding: '0.5rem 1rem' }}>Register</button>
+      </form>
+      {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
+    </div>
   );
-}
+};
+
 export default Register;

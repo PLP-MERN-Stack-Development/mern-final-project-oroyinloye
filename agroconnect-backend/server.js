@@ -3,10 +3,10 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const express = require('express');
-
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const authRoutes = require('./routes/auth');
 
 dotenv.config();
 const app = express();
@@ -74,3 +74,8 @@ module.exports = app; // for testing
 
 // Define your routes here
 // Example: app.use('/api/auth', authRoutes);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server running on port ${process.env.PORT || 5000}`);
+});
+
+module.exports = app; // for testing  
