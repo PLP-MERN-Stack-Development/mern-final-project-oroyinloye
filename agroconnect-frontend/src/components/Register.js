@@ -60,9 +60,11 @@ const Register = () => {
           required
           style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
         />
-        <button type="submit" style={{ padding: '0.5rem 1rem' }}>Register</button>
+        <button type="submit" style={{ width: '100%', padding: '0.75rem', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>
+          Register
+        </button>
       </form>
-      {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
+      {message && <p style={{ marginTop: '1rem', textAlign: 'center' }}>{message}</p>}
     </div>
   );
 };
