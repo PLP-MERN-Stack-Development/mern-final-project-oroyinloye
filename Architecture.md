@@ -50,6 +50,17 @@ This document outlines the architecture of the AgroConnect MERN stack applicatio
 ---
 
 ## Folder Structure
+## API Endpoints
+- `POST /api/auth/register` – User registration
+- `POST /api/auth/login` – User login
+- `GET /api/dashboard` – Protected dashboard data
+
+## Roadmap
+- Week 1–2: Project planning, wireframes, schema design
+- Week 3–4: Backend setup, API development
+- Week 5–6: Frontend integration, routing, styling
+- Week 7: Testing, deployment
+- Week 8: Final polish, documentation, presentation
 
 mern-project/ ├── client/ # React frontend ├── server/ # Express backend ├── docs/ # Documentation ├── .github/workflows/ # CI/CD config └── README.md
 

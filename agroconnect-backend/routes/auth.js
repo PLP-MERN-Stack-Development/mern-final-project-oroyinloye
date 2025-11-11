@@ -1,39 +1,98 @@
-const bcrypt = require('bcryptjs');
-const User = require('./models/User'); // adjust path as needed
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
-app.post('/api/auth/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashedPassword });
+    await user.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error('Registration error:', err.message);
+    res.status(400).json({ error: 'Registration failed', details: err.message });
   }
-
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res.status(409).json({ message: 'Email already in use' });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ name, email, password: hashedPassword });
-  await newUser.save();
-
-  res.status(201).json({ message: 'User registered successfully' });
 });
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
 
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
+module.exports = router;
+router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
+  // ✅ Now these variables are defined
+  console.log('Registering user:', { name, email });
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-  res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashedPassword });
+    await user.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error('Registration error:', err.message);
+    console.log('Registering user:', { name, email });
+    res.status(400).json({ error: 'Registration failed', details: err.message });
+  }
 });
+router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+
+  console.log('Registering user:', { name, email });
+  console.log('✅ /register route hit');
+console.log('Request body:', req.body);
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashedPassword });
+    await user.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error('Registration error:', err.message);
+    console.log('Registering user:', { name, email });
+    res.status(400).json({ error: 'Registration failed', details: err.message });
+  }
+});
+
+module.exports = router;  
+router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+
+  console.log('Registering user:', { name, email });
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashedPassword });
+    await user.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error('Registration error:', err.message);
+    console.log('Registering user:', { name, email });
+    res.status(400).json({ error: 'Registration failed', details: err.message });
+  }
+});
+module.exports = router;  

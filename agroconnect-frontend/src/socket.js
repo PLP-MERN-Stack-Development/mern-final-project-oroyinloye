@@ -1,1 +1,8 @@
-new WebSocket('ws://localhost:3000/ws')
+const socket = {
+  on: () => {},
+  off: () => {},
+  emit: () => {},
+  disconnect: () => {}
+};
+
+export default socket;

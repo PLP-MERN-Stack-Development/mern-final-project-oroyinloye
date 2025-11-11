@@ -13,6 +13,12 @@ AgroConnect is a full-stack web application built with the MERN stack to connect
 - **Frontend**: [agroconnect-frontend.netlify.app](https://agroconnect-frontend.netlify.app)
 - **Backend**: [agroconnect-backend](https://mern-final-project-oroyinloye.onrender.com)
 
+## Wireframes
+Below are the design mockups for the application:
+
+![Login Wireframe](wireframes/login-wireframe.png)
+![Dashboard Wireframe](wireframes/dashboard-wireframe.png)
+
 ## Tech Stack
 
 - **Frontend**: React, React Router, Axios
