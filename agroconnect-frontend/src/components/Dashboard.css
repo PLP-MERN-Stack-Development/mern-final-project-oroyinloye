@@ -1,28 +1,38 @@
+/* Dashboard styles */
+
 .dashboard-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
-.dashboard-header {
+.dashboard-container h1 {
   font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
+  color: #2c3e50;
+  margin-bottom: 10px;
 }
 
-.dashboard-info {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
+.dashboard-container p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
 }
 
-.logout-button {
-  padding: 0.5rem 1rem;
-  background-color: #e63946;
-  color: white;
+.logout-btn {
+  background-color: #e74c3c;
   border: none;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 1rem;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
 }

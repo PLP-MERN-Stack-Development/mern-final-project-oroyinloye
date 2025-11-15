@@ -1,44 +1,61 @@
 import React, { useState } from 'react';
+import { register } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
+import './Form.css';   // ✅ import shared form styles
 
 function Register() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-  const [errors, setErrors] = useState({});
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    if (!formData.password) newErrors.password = 'Password is required';
-    return newErrors;
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+
+    try {
+      const data = await register(name, email, password);
+
+      if (data.message === 'User registered successfully') {
+        alert('Registration successful! Please login.');
+        navigate('/login');
+      } else {
+        alert(data.message || 'Registration failed');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error');
     }
-    console.log('Registering:', formData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="form-container">
       <h2>Register</h2>
-      <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
-      {errors.name && <p>{errors.name}</p>}
-      <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-      {errors.email && <p>{errors.email}</p>}
-      <input name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
-      {errors.password && <p>{errors.password}</p>}
-      <button type="submit">Sign Up</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password (min 6 chars)"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
+      <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
   );
 }
 

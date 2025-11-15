@@ -1,16 +1,29 @@
 const express = require('express');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+const authRoutes = require('./routes/auth');
 
 const app = express();
-connectDB();
 
-app.use(cors());
+// Middleware
 app.use(express.json());
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/userRoutes'));
+app.use(cors({
+  origin: 'http://localhost:3000',   // allow React frontend
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
+// Routes
+app.use('/api/auth', authRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// MongoDB connection
+mongoose.connect('mongodb://127.0.0.1:27017/agroconnect', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// Start server
+const PORT = 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

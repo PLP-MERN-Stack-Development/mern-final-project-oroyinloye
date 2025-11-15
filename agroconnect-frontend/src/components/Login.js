@@ -1,39 +1,53 @@
 import React, { useState } from 'react';
+import { login } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
+import './Form.css';   // ✅ import shared form styles
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch('https://mern-final-project-oroyinloye.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
 
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem('token', data.token); // ✅ Store token
-        alert('Login successful!');
-        window.location.href = '/dashboard'; // ✅ Redirect to dashboard
+    try {
+      const data = await login(email, password);
+
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
       } else {
-        alert(data.message);
+        alert(data.message || 'Login failed');
       }
     } catch (err) {
-      console.error('Login error:', err);
+      console.error(err);
       alert('Network error');
     }
   };
 
   return (
-    <form onSubmit={handleLogin}>
+    <div className="form-container">
       <h2>Login</h2>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit">Login</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+      <p>No account? <a href="/register">Register</a></p>
+    </div>
   );
 }
 
