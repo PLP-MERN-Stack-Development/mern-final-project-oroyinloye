@@ -6,13 +6,6 @@ export async function login(email, password) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
   });
-  return res.json();
-}
-
-export async function getProfile() {
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${BASE_URL}/api/auth/profile`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  if (!res.ok) throw new Error('Login failed');
   return res.json();
 }
