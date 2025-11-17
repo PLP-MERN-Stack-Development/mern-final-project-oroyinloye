@@ -9,10 +9,7 @@ const app = express();
 
 // CORS (add Netlify domain later after deploy)
 app.use(cors({
-  origin: [
-    'https://agroconnect-frontend.netlify.app',
-    'http://localhost:3000'
-  ],
+  origin: ['https://agroconnect-frontend.netlify.app', 'http://localhost:3000'],
   credentials: true
 }));
 
