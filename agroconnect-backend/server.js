@@ -1,29 +1,36 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const authRoutes = require('./routes/auth');
+// Import dependencies (adjust to your app)
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
+dotenv.config();
 const app = express();
 
-// Middleware
-app.use(express.json());
+// CORS (add Netlify domain later after deploy)
 app.use(cors({
-  origin: 'http://localhost:3000',   // allow React frontend
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: ['http://localhost:3000'],
+  credentials: true
 }));
 
-// Routes
-app.use('/api/auth', authRoutes);
+app.use(express.json());
 
 // MongoDB connection
-mongoose.connect('mongodb://127.0.0.1:27017/agroconnect', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+const MONGO_URI = process.env.MONGO_URI;
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB error:', err));
 
-// Start server
-const PORT = 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Health check endpoint for Heroku
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
+// Example auth route (adjust to your routes)
+app.get('/api/auth/profile', (req, res) => {
+  res.json({ ok: true });
+});
+
+// Heroku-provided port
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
