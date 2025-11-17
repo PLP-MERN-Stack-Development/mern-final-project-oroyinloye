@@ -1,27 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
-import './Navbar.css';   // ✅ import updated CSS
+import { NavLink } from 'react-router-dom';
+import './Navbar.css';
 
 function Navbar() {
-  const token = localStorage.getItem('token');
-
   return (
     <nav className="navbar">
-      <div className="navbar-brand">AgroConnect</div>
-      <ul className="navbar-links">
-        {!token && (
-          <>
-            <li><Link to="/login" className="nav-link">Login</Link></li>
-            <li><Link to="/register" className="nav-link">Register</Link></li>
-          </>
-        )}
-        {token && (
-          <>
-            <li><Link to="/dashboard" className="nav-link">Dashboard</Link></li>
-            <li><LogoutButton /></li>
-          </>
-        )}
+      <h1 className="logo">AgroConnect</h1>
+      <ul className="nav-links">
+        <li>
+          <NavLink to="/register" className={({ isActive }) => isActive ? "active-link" : ""}>
+            Register
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/login" className={({ isActive }) => isActive ? "active-link" : ""}>
+            Login
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}>
+            Dashboard
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );

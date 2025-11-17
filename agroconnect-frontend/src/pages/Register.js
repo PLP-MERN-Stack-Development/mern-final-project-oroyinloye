@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { registerUser } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
+import '../App.css';
 
 function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -12,19 +13,22 @@ function Register() {
     e.preventDefault();
     const res = await registerUser(form);
     if (res.message === 'User registered successfully') {
-      navigate('/login'); // redirect to login after registration
+      navigate('/login');
     } else {
       alert(res.error || 'Registration failed');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="name" placeholder="Name" onChange={handleChange} />
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Register</button>
-    </form>
+    <div className="container">
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <input name="name" placeholder="Name" onChange={handleChange} />
+        <input name="email" placeholder="Email" onChange={handleChange} />
+        <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+        <button type="submit">Register</button>
+      </form>
+    </div>
   );
 }
 

@@ -1,51 +1,39 @@
-/* Navbar styled to match Dashboard card */
-
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;          /* same as Dashboard card */
-  padding: 15px 25px;
-  border-radius: 8px;              /* rounded corners */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);  /* subtle shadow */
-  margin: 10px 20px;               /* spacing around navbar */
+  background: #007bff;
+  padding: 10px 20px;
 }
 
-.navbar-brand {
-  font-size: 1.5rem;
+.logo {
+  color: #fff;
+  font-size: 20px;
   font-weight: bold;
-  color: #2c3e50;                  /* same heading color as Dashboard */
 }
 
-.navbar-links {
+.nav-links {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin: 0;
   padding: 0;
 }
 
-.nav-link {
-  text-decoration: none;
-  color: #2c3e50;                  /* consistent text color */
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-  color: #1abc9c;                  /* hover accent */
-}
-
-.logout-btn {
-  background-color: #e74c3c;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
+.nav-links li a {
   color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 
-.logout-btn:hover {
-  background-color: #c0392b;
+.nav-links li a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.active-link {
+  background: #fff;
+  color: #007bff;
+  font-weight: bold;
 }
