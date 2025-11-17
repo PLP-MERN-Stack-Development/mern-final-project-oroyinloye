@@ -1,31 +1,17 @@
-name: MERN CI/CD Pipeline
-
+name: Deploy Backend to Heroku
 on:
   push:
-    branches: [main]
-
+    branches: [ main ]
 jobs:
-  build-and-test:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install frontend dependencies
+      - name: Push subtree to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
-          cd client
-          npm install
-          npm run build
-
-      - name: Install backend dependencies and run tests
-        run: |
-          cd server
-          npm install
-          npm test
-          
+          git remote add heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/agroconnect-backend.git
+          git subtree push --prefix agroconnect-backend heroku main
