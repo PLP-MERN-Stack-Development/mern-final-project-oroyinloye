@@ -1,19 +1,25 @@
 const jwt = require('jsonwebtoken');
 
-function authMiddleware(req, res, next) {
-  const authHeader = req.header('Authorization');
-  if (!authHeader) {
-    return res.status(401).json({ message: 'No token provided' });
+// Middleware to verify JWT token
+function auth(req, res, next) {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
-  const token = authHeader.replace('Bearer ', '');
   try {
-    const decoded = jwt.verify(token, 'yourSecretKey'); // use same secret as in login
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Attach user payload to request
     req.user = decoded;
+
     next();
   } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
+    console.error('JWT verification failed:', err.message);
+    res.status(401).json({ msg: 'Token is not valid' });
   }
 }
 
-module.exports = authMiddleware;
+module.exports = auth;
