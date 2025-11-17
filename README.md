@@ -2,6 +2,9 @@
 A Farmer-Buyer Marketplace Project
 Testing deployment
 
+![Deploy MERN App](https://github.com/PLP-MERN-Stack-Development/mern-final-project-oroyinloye/actions/workflows/deploy.yml/badge.svg)
+
+
 https://mern-final-project-oroyinloye.onrender.com/
 
 # AgroConnect – MERN Stack Capstone Project
