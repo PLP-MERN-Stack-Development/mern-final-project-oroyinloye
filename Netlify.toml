@@ -1,0 +1,3 @@
+  base = "agroconnect-frontend"
+  command = "npm run build"
+  publish = "build"
