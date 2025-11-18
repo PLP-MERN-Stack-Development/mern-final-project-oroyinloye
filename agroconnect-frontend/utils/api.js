@@ -16,12 +16,3 @@ export async function loginUser(userData) {
     body: JSON.stringify(userData),
   });
   return res.json();
-}
-
-export async function getProfile() {
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API_URL}/api/users/me`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.json();
-}
