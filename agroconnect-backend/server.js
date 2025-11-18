@@ -1,4 +1,4 @@
-// ✅ Replace with your actual frontend Render URL
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
@@ -15,13 +15,13 @@ app.use(cors({
 
 app.use(express.json());
 
-// Example root route
+// Root route
 app.get('/', (req, res) => {
   res.send('Backend API is running 🚀');
 });
 
-// Import your routes
-const authRoutes = require('./routes/auth'); // adjust path if needed
+// Import your routes once
+const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
 // MongoDB connection
@@ -35,10 +35,3 @@ mongoose.connect(process.env.MONGO_URI, {
 // Start server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-app.use(cors({
-  origin: FRONTEND_URL,
-  credentials: true
-}));
-
-app.use(express.json());
