@@ -1,8 +1,12 @@
-# netlify.toml
 [build]
-  # set base if your app is in a subfolder, otherwise remove or set to "."
-  base = "."
-  # change publish to your build output directory, e.g. "dist" or "build"
-  publish = "dist"
-  # change command to your project's build command
+  base = "agroconnect-frontend"
   command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
