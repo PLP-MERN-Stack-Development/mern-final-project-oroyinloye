@@ -14,4 +14,3 @@ export async function getExample() {
     throw new Error(`API error: ${res.status}`);
   }
   return res.json();
-}
