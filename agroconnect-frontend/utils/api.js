@@ -1,7 +1,7 @@
 const BASE_URL = 'http://localhost:5000';
 
 // REGISTER
-export async function register(name, email, password) {
+export async function registerUser(name, email, password) {
   const res = await fetch(`${BASE_URL}/api/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -11,7 +11,7 @@ export async function register(name, email, password) {
 }
 
 // LOGIN
-export async function login(email, password) {
+export async function loginUser(email, password) {
   const res = await fetch(`${BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -22,11 +22,11 @@ export async function login(email, password) {
 
 // GET PROFILE (protected route)
 export async function getProfile() {
-  const token = localStorage.getItem('token');
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const res = await fetch(`${BASE_URL}/api/auth/profile`, {
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${token}`
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
     }
   });
   return res.json();
