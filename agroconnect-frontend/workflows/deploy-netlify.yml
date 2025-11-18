@@ -29,5 +29,5 @@ jobs:
         with:
           args: deploy --prod --dir=build
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.nfp_61jZscPFQt6gtrsiV3Tn5hYrBhzDzfnV3209 }}
+          NETLIFY_SITE_ID: ${{ secrets.d68d396e-2bae-4885-8540-9c83689b0b84 }}
