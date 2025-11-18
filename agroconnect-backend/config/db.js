@@ -1,11 +1,18 @@
+// agroconnect-backend/config/db.js
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
+  const uri = process.env.MONGO_URI;
+  if (!uri) {
+    throw new Error('MONGO_URI is not set');
+  }
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(uri, {
+      autoIndex: true
+    });
     console.log('MongoDB connected');
   } catch (err) {
-    console.error(err.message);
+    console.error('MongoDB connection error:', err.message);
     process.exit(1);
   }
 };

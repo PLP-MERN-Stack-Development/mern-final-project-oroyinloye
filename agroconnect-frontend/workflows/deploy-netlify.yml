@@ -3,6 +3,7 @@ name: Deploy Frontend to Netlify
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:   # 👈 allows manual trigger
 
 jobs:
   build-deploy:
@@ -19,6 +20,24 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Debug secrets
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
+            echo "NETLIFY_AUTH_TOKEN is NOT set"; exit 1
+          else
+            echo "NETLIFY_AUTH_TOKEN is set ✅"
+          fi
+          if [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "NETLIFY_SITE_ID is NOT set"; exit 1
+          else
+            echo "NETLIFY_SITE_ID is set ✅"
+          fi
+          if [ -z "${REACT_APP_API_URL}" ]; then
+            echo "REACT_APP_API_URL is NOT set"; exit 1
+          else
+            echo "REACT_APP_API_URL is set ✅"
+          fi
+
       - name: Install dependencies and build
         run: |
           npm ci
@@ -29,5 +48,5 @@ jobs:
         with:
           args: deploy --prod --dir=build
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.nfp_61jZscPFQt6gtrsiV3Tn5hYrBhzDzfnV3209 }}
-          NETLIFY_SITE_ID: ${{ secrets.d68d396e-2bae-4885-8540-9c83689b0b84 }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
