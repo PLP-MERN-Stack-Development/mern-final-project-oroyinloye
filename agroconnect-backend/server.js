@@ -42,20 +42,3 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-// Example root route
-app.get('/', (req, res) => {
-  res.send('Backend API is running 🚀');
-});
-
-// Import your routes
-const authRoutes = require('./routes/auth'); // adjust path if needed
-app.use('/api/auth', authRoutes);
-
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error(err));
