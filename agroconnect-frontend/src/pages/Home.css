@@ -1,0 +1,90 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* account for navbar height */
+  background-color: var(--color-bg);
+  padding: 20px;
+}
+
+.home-card {
+  background: var(--color-white);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  max-width: 600px;
+}
+
+.home-card h1 {
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+.home-card p {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  margin-bottom: 30px;
+}
+
+/* Button container */
+.home-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Base button style */
+.home-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  min-width: 140px;
+  text-align: center;
+}
+
+/* Primary button */
+.home-button.primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.home-button.primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Secondary button */
+.home-button.secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.home-button.secondary:hover {
+  background-color: var(--color-secondary-dark);
+}
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 600px) {
+  .home-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .home-button {
+    width: 100%;
+  }
+}
+.home-button:active {
+  transform: scale(0.98);
+}
+.home-button.primary:active {
+  background-color: var(--color-primary-darker);
+}
+.home-button.secondary:active {
+  background-color: var(--color-secondary-darker);
+}

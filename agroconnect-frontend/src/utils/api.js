@@ -1,18 +1,13 @@
-// src/utils/api.js
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-// Base URL comes from environment variable
-const API_URL = process.env.REACT_APP_API_URL;
-
-// Helper to handle responses
 async function handleResponse(res) {
+  const data = await res.json();
   if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || `Request failed with status ${res.status}`);
+    throw new Error(data.error || `Request failed with status ${res.status}`);
   }
-  return res.json();
+  return data;
 }
 
-// Register new user
 export async function registerUser(name, email, password) {
   const res = await fetch(`${API_URL}/api/auth/register`, {
     method: "POST",
@@ -22,7 +17,6 @@ export async function registerUser(name, email, password) {
   return handleResponse(res);
 }
 
-// Login existing user
 export async function loginUser(email, password) {
   const res = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
@@ -32,7 +26,6 @@ export async function loginUser(email, password) {
   return handleResponse(res);
 }
 
-// Get profile of logged-in user
 export async function getProfile() {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/api/auth/profile`, {
@@ -41,6 +34,18 @@ export async function getProfile() {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
+  });
+  return handleResponse(res);
+}
+export async function updateProfile(profileData) {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/api/auth/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(profileData),
   });
   return handleResponse(res);
 }

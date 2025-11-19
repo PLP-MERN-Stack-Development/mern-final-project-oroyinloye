@@ -1,69 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { registerUser } from "../utils/api";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) navigate("/dashboard");
-  }, [navigate]);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage("");
     try {
-      await registerUser(form.name, form.email, form.password);
-      setMessage("✅ Registration successful!");
-      navigate("/login");
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("Registration successful!");
+      } else {
+        setMessage(data.error || "Registration failed");
+      }
     } catch (err) {
-      console.error(err);
-      setMessage("❌ Registration failed.");
-    } finally {
-      setLoading(false);
+      setMessage("Server error");
     }
-  }
+  };
 
   return (
-    <div className="container">
-      <div className="card">
-        <h2>Register</h2>
-        <form className="form" onSubmit={handleSubmit}>
-          <label className="label">Name</label>
-          <input
-            className="input"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-
-          <label className="label">Email</label>
-          <input
-            className="input"
-            type="email"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
-
-          <label className="label">Password</label>
-          <input
-            className="input"
-            type="password"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-
-          <button className="button" type="submit" disabled={loading}>
-            {loading ? "Submitting..." : "Create account"}
-          </button>
-
-          {message && <p className="message error">{message}</p>}
-        </form>
-      </div>
+    <div style={{ padding: "20px" }}>
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+        <button type="submit">Create Account</button>
+      </form>
+      <p>{message}</p>
     </div>
   );
 }

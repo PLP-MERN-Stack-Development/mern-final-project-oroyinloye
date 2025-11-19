@@ -1,387 +1,80 @@
-# AgroConnect
-A Farmer-Buyer Marketplace Project
-Testing deployment
+# Agroconnect
 
-![Deploy MERN App](https://github.com/PLP-MERN-Stack-Development/mern-final-project-oroyinloye/actions/workflows/deploy.yml/badge.svg)
+Agroconnect is a web application designed to connect farmers, buyers, and agricultural service providers.  
+It provides a simple platform for **registration, login, and dashboard access**, enabling users to manage their agricultural activities and build trusted networks.
 
+---
 
-https://mern-final-project-oroyinloye.onrender.com/
+## Features
+- **Home Page**: Welcome message and introduction to Agroconnect.
+- **Register**: Create new accounts with name, email, and password.
+- **Login**: Authenticate users and store JWT tokens securely.
+- **Dashboard**: Displays user profile details after login.
+- **Logout**: Clears session and redirects to login.
+- **Protected Routes**: Dashboard is only accessible when logged in.
+- **Responsive Navbar**: Clean navigation with conditional links.
 
-# AgroConnect – MERN Stack Capstone Project
-
-AgroConnect is a full-stack web application built with the MERN stack to connect farmers with agricultural experts and resources. It enables user registration, secure login, and access to a dashboard for managing agricultural data and insights.
-
-## Live Demo
-
-- **Frontend**: [agroconnect-frontend.netlify.app](https://agroconnect-frontend.netlify.app)
-- **Backend**: [agroconnect-backend](https://mern-final-project-oroyinloye.onrender.com)
-
-## Wireframes
-Below are the design mockups for the application:
-
-![Login Wireframe](wireframes/login-wireframe.png)
-![Dashboard Wireframe](wireframes/dashboard-wireframe.png)
+---
 
 ## Tech Stack
-
-- **Frontend**: React, React Router, Axios
-- **Backend**: Node.js, Express.js, MongoDB, Mongoose
-- **Authentication**: JWT, bcrypt
-- **CI/CD**: GitHub Actions
-- **Deployment**: Netlify (frontend), Render (backend)
-
-## Setup Instructions
-
-```bash
-# Clone the repo
-git clone https://github.com/PLP-MERN-Stack-Development/mern-final-project-oroyinloye.git
-
-# Install frontend
-cd client
-npm install
-npm start
-
-# Install backend
-cd ../server
-npm install
-npm run dev
-
-## Testing
-# Run backend tests
-cd server
-npm test
-
-## Documentation
-API Docs
-User Guide
-Architecture Overview
-
-Screenshots
-
-## Demo Video
-Watch the 5-minute walkthrough
-
-## Author
-Richard Oroyinloye – GitHub
-
-## 2. Basic Test Setup
-
-### Backend (Express + Jest + Supertest)
-
-**Install dependencies:**
-```bash
-cd server
-npm install --save-dev jest supertest
-
-
-## Architecture Diagram
-[ React Frontend ]
-       |
-       ↓
-[ Express API Server ]
-       |
-       ↓
-[ MongoDB Database ]
-
-## Include in docs/architecture.md:
-Component breakdown
-Data flow (frontend → backend → DB)
-Auth flow (JWT)
-Deployment flow (GitHub → Netlify/Render)
-
-AgroConnect API Documentation
-## Base URL
-Code
-https://mern-final-project-oroyinloye.onrender.com/api
-
-## Authentication
-Method: JWT (JSON Web Token)
-
-Header Format:
-
-Code
-Authorization: Bearer <token>
-Required for all protected routes (e.g., dashboard, user profile)
-
-## User Endpoints
-POST /register
-Register a new user
-
-Request Body:
-
-json
-{
-  "name": "Richard",
-  "email": "richard@example.com",
-  "password": "securePassword123"
-}
-Response:
-
-json
-{
-  "message": "User registered successfully",
-  "user": {
-    "_id": "abc123",
-    "name": "Richard",
-    "email": "richard@example.com"
-  },
-  "token": "jwt_token_here"
-}
-Errors:
-400 Bad Request: Missing fields or invalid email
-409 Conflict: Email already exists
-
-POST /login
-Authenticate user and return token
-
-Request Body:
-
-json
-{
-  "email": "richard@example.com",
-  "password": "securePassword123"
-}
-Response:
-
-json
-{
-  "message": "Login successful",
-  "token": "jwt_token_here"
-}
-Errors:
-401 Unauthorized: Invalid credentials
-
-GET /profile
-Get logged-in user's profile
-
-Headers:
-Code
-Authorization: Bearer <token>
-Response:
-
-json
-{
-  "_id": "abc123",
-  "name": "Richard",
-  "email": "richard@example.com"
-}
-Errors:
-401 Unauthorized: Missing or invalid token
-
-Agro Data Endpoints (Example)
-GET /crops
-Fetch list of crops
-
-Response:
-
-json
-[
-  {
-    "id": "crop1",
-    "name": "Maize",
-    "season": "Rainy",
-    "region": "North Central"
-  },
-  ...
-]
-POST /crops
-Add a new crop (admin only)
-
-## Headers:
-Code
-Authorization: Bearer <admin_token>
-Request Body:
-
-json
-{
-  "name": "Cassava",
-  "season": "Dry",
-  "region": "South West"
-}
-Response:
-
-json
-{
-  "message": "Crop added successfully",
-  "crop": { ... }
-}
-## Error Handling
-All errors follow this format:
-
-json
-{
-  "error": "Descriptive error message"
-}
-Common status codes:
-400 Bad Request
-401 Unauthorized
-403 Forbidden
-404 Not Found
-500 Internal Server Error
-
-## Notes
-All endpoints return JSON
-Use HTTPS in production
-Rate limiting and input validation are enforced
-
-## AgroConnect API Documentation
-
-## Base URL
-
-https://mern-final-project-oroyinloye.onrender.com/api
-
-Code
+- **Frontend**: React.js (React Router v6, functional components, hooks)
+- **Backend**: Node.js + Express.js (REST API endpoints for auth)
+- **Database**: MongoDB (user storage)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Styling**: CSS (global variables + component styles)
 
 ---
 
-## Authentication
-
-- **Method**: JWT (JSON Web Token)
-- **Header Format**:
-Authorization: Bearer <token>
-
-Code
-- Required for all protected routes (e.g., dashboard, user profile)
-
----
-
-## User Endpoints
-
-### `POST /register`
-Register a new user
-
-- **Request Body**:
-```json
-{
-"name": "Richard",
-"email": "richard@example.com",
-"password": "securePassword123"
-}
-Response:
-
-json
-{
-  "message": "User registered successfully",
-  "user": {
-    "_id": "abc123",
-    "name": "Richard",
-    "email": "richard@example.com"
-  },
-  "token": "jwt_token_here"
-}
-Errors:
-400 Bad Request: Missing fields or invalid email
-409 Conflict: Email already exists
-
-POST /login
-Authenticate user and return token
-
-Request Body:
-
-json
-{
-  "email": "richard@example.com",
-  "password": "securePassword123"
-}
-Response:
-
-json
-{
-  "message": "Login successful",
-  "token": "jwt_token_here"
-}
-Errors:
-
-401 Unauthorized: Invalid credentials
-
-GET /profile
-Get logged-in user's profile
-
-Headers:
-
-Code
-Authorization: Bearer <token>
-Response:
-
-json
-{
-  "_id": "abc123",
-  "name": "Richard",
-  "email": "richard@example.com"
-}
-Errors:
-
-401 Unauthorized: Missing or invalid token
-
-## Agro Data Endpoints
-GET /crops
-Fetch list of crops
-
-Response:
-
-json
-[
-  {
-    "id": "crop1",
-    "name": "Maize",
-    "season": "Rainy",
-    "region": "North Central"
-  },
-  ...
-]
-POST /crops
-Add a new crop (admin only)
-
-Headers:
-
-Code
-Authorization: Bearer <admin_token>
-Request Body:
-
-json
-{
-  "name": "Cassava",
-  "season": "Dry",
-  "region": "South West"
-}
-Response:
-
-json
-{
-  "message": "Crop added successfully",
-  "crop": {
-    "id": "crop2",
-    "name": "Cassava",
-    "season": "Dry",
-    "region": "South West"
-  }
-}
-## Error Handling
-All errors follow this format:
-
-json
-{
-  "error": "Descriptive error message"
-}
-Common status codes:
-400 Bad Request
-401 Unauthorized
-403 Forbidden
-404 Not Found
-500 Internal Server Error
-
-## Notes
-All endpoints return JSON
-Use HTTPS in production
-Rate limiting and input validation are enforced
-
-Code
+## Project Structure
+src/ 
+├── components/ 
+              │ └── Navbar.js 
+              │ └── Navbar.css 
+├── pages/ 
+         │ └── Home.js 
+         │ └── Register.js 
+         │ └── Login.js 
+         │ └── Dashboard.js 
+├── App.js 
+├── App.css 
+└── index.js
 
 ---
 
-Once you've added this file to your repo, commit and push it:
+## Installation & Setup
 
-```bash
-git add docs/api.md
-git commit -m "Add API documentation"
-git push
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/agroconnect.git
+   cd agroconnect
+
+2. Install dependencies:
+    npm install
+
+3. Start the frontend:
+    npm start
+
+4. Backend setup (in /server folder):  
+    npm install
+    npm run dev
+
+5. Access Anywhere
+Once deployed, Agroconnect can be accessed globally via:
+
+Frontend (React): https://agroconnect-vfag.onrender.com
+
+Backend (API): https://mern-final-project-g7hp.onrender.com
+
+
+ ## Authentication Flow
+User registers → data stored in MongoDB.
+User logs in → JWT token issued.
+Token stored in localStorage.
+Dashboard fetches profile using Authorization: Bearer <token>.
+Logout clears token and redirects to login.
+
+## Contributor
+Richard Oyinloye
+
+## License
+MIT License — free to use and modify.

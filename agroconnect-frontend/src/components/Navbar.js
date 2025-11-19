@@ -1,30 +1,33 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import './Navbar.css';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Navbar.css";
 
-function Navbar() {
+export default function Navbar() {
+  const navigate = useNavigate();
+  const isAuthenticated = !!localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <nav className="navbar">
-      <h1 className="logo">AgroConnect</h1>
-      <ul className="nav-links">
-        <li>
-          <NavLink to="/register" className={({ isActive }) => isActive ? "active-link" : ""}>
-            Register
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/login" className={({ isActive }) => isActive ? "active-link" : ""}>
-            Login
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}>
-            Dashboard
-          </NavLink>
-        </li>
+      <div className="navbar-title">
+        <Link to="/" className="navbar-logo">Agroconnect</Link>
+      </div>
+      <ul className="navbar-menu">
+        <li><Link to="/dashboard" className="navbar-link">Dashboard</Link></li>
+        {!isAuthenticated && (
+          <>
+            <li><Link to="/register" className="navbar-link">Register</Link></li>
+            <li><Link to="/login" className="navbar-link">Login</Link></li>
+          </>
+        )}
+        {isAuthenticated && (
+          <li><button onClick={handleLogout} className="navbar-link">Logout</button></li>
+        )}
       </ul>
     </nav>
   );
 }
-
-export default Navbar;

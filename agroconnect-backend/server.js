@@ -1,37 +1,38 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+
+// Load environment variables from .env
+dotenv.config();
 
 const app = express();
 
-// ✅ Replace with your actual frontend Render URL
-const FRONTEND_URL = 'https://agroconnect-vfag.onrender.com';
-app.use(cors({
-  origin: FRONTEND_URL,
-  credentials: true
-}));
-
-
+// Middleware
 app.use(express.json());
+app.use(cors());
+
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1);
+  });
+
+// Routes
+const authRoutes = require("./routes/auth");
+app.use("/api/auth", authRoutes);
 
 // Root route
-app.get('/', (req, res) => {
-  res.send('Backend API is running 🚀');
+app.get("/", (req, res) => {
+  res.send("Agroconnect backend is running 🚀");
 });
 
-// Import your routes once
-const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);
-
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error(err));
-
 // Start server
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

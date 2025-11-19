@@ -1,21 +1,26 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/Home";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
 
 function App() {
+  const isAuthenticated = !!localStorage.getItem("token");
+
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+        />
+      </Routes>
+    </>
   );
 }
 

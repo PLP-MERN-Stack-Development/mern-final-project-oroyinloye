@@ -1,0 +1,11 @@
+import React from "react";
+import "./Home.css";
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Welcome to Agroconnect 🌱</h1>
+      <p>Your trusted platform for connecting farmers, buyers, and agricultural services.</p>
+    </div>
+  );
+}

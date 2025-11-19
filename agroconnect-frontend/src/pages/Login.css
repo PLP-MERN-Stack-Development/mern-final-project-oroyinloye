@@ -1,23 +1,23 @@
-/* Dashboard container */
-.dashboard-container {
+/* Login page container */
+.login-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: 40px 20px;
 }
 
-/* Dashboard card */
-.dashboard-card {
+/* Login card */
+.login-card {
   background: #fff;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.1);
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
 }
 
 /* Heading */
-.dashboard-card h2 {
+.login-card h2 {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 1.8rem;
@@ -25,32 +25,60 @@
   text-align: center;
 }
 
-/* User info */
-.dashboard-info {
-  margin-bottom: 20px;
+/* Form styles */
+.login-form {
+  display: flex;
+  flex-direction: column;
 }
 
-.dashboard-info p {
+.login-label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-input {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 1rem;
-  margin: 8px 0;
 }
 
-/* Logout button */
-.dashboard-logout {
-  display: block;
-  margin: 0 auto;
-  background-color: #c62828;
+.login-input:focus {
+  border-color: #2e7d32;
+  outline: none;
+}
+
+/* Submit button */
+.login-button {
+  background-color: #2e7d32;
   color: #fff;
-  padding: 12px 20px;
+  padding: 12px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1rem;
   transition: background-color 0.2s ease;
 }
 
-.dashboard-logout:hover {
-  background-color: #8e0000;
+.login-button:hover {
+  background-color: #1b5e20;
+}
+
+/* Messages */
+.login-message {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.login-message.error {
+  color: #c62828;
+}
+
+.login-message.success {
+  color: #2e7d32;
 }
 .navbar {
   background-color: var(--color-primary);

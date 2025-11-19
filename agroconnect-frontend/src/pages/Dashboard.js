@@ -1,20 +1,31 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const { user, logout, loading } = useContext(AuthContext);
+  const [profile, setProfile] = useState(null);
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <p>You are not logged in.</p>;
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("http://localhost:5000/api/auth/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setProfile(data))
+      .catch(() => setProfile(null));
+  }, []);
 
   return (
-    <div className="container">
-      <div className="card">
-        <h2>Dashboard</h2>
-        <p><strong>Name:</strong> {user.name}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-        <button className="button logout" onClick={logout}>Logout</button>
-      </div>
+    <div style={{ padding: "20px" }}>
+      <h2>Dashboard</h2>
+      {profile ? (
+        <div>
+          <p>Name: {profile.name}</p>
+          <p>Email: {profile.email}</p>
+        </div>
+      ) : (
+        <p>Please login to view your profile.</p>
+      )}
     </div>
   );
 }

@@ -21,7 +21,12 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
+  "proxy": "http://localhost:5000",
+  "homepage": ".",
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
+  },              
+  "browserslist": {   
     "production": [
       ">0.2%",
       "not dead",
@@ -34,3 +39,5 @@
     ]
   }
 }
+
+
