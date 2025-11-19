@@ -6,12 +6,12 @@ require('dotenv').config();
 const app = express();
 
 // ✅ Replace with your actual frontend Render URL
-const FRONTEND_URL = 'https://agroconnect-vfag.onrender.com/';
-
+const FRONTEND_URL = 'https://agroconnect-vfag.onrender.com';
 app.use(cors({
   origin: FRONTEND_URL,
   credentials: true
 }));
+
 
 app.use(express.json());
 

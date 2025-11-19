@@ -7,6 +7,7 @@ export async function registerUser(name, email, password) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, password })
   });
+  if (!res.ok) throw new Error(`Register failed: ${res.status}`);
   return res.json();
 }
 
@@ -17,17 +18,24 @@ export async function loginUser(email, password) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
   });
-  return res.json();
+  if (!res.ok) throw new Error(`Login failed: ${res.status}`);
+  const data = await res.json();
+  if (data.token) {
+    localStorage.setItem('token', data.token);
+  }
+  return data;
 }
 
-// GET PROFILE
+// PROFILE
 export async function getProfile() {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const res = await fetch(`${BASE_URL}/api/auth/profile`, {
-    method: 'GET',
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/profile`, {
+    method: "GET",
     headers: {
+      "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     }
   });
+  if (!res.ok) throw new Error(`Profile fetch failed: ${res.status}`);
   return res.json();
 }

@@ -1,17 +1,17 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import ProtectedRoute from './components/ProtectedRoute';
-import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
+    <Router>
       <Routes>
-        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* ✅ Protect Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -21,7 +21,7 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

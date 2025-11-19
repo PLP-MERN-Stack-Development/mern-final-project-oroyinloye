@@ -1,43 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { getProfile } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import React, { useEffect, useState } from "react";
+import { getProfile } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
-function Dashboard() {
-  const [user, setUser] = useState(null);
+export default function Dashboard() {
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchProfile() {
-      const res = await getProfile();
-      if (res.error) {
-        alert('Unauthorized, please login again');
-        navigate('/login');
-      } else {
-        setUser(res);
+      setLoading(true);
+      setMessage("");
+      try {
+        const data = await getProfile();
+        setProfile(data);
+      } catch (err) {
+        console.error(err);
+        setMessage("❌ Failed to load profile. Please login again.");
+      } finally {
+        setLoading(false);
       }
     }
     fetchProfile();
-  }, [navigate]);
+  }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+  // ✅ Logout handler
+  function handleLogout() {
+    localStorage.removeItem("token"); // clear saved token
+    navigate("/login"); // redirect to login page
+  }
+
+  if (loading) {
+    return <p>Loading profile...</p>;
+  }
 
   return (
-    <div className="dashboard">
-      {user ? (
-        <>
-          <h1>Welcome, {user.name}</h1>
-          <p>Email: {user.email}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="container">
+      <div className="card">
+        <h2>Dashboard</h2>
+        {message && <p className="error">{message}</p>}
+        {profile ? (
+          <div>
+            <p><strong>Name:</strong> {profile.name}</p>
+            <p><strong>Email:</strong> {profile.email}</p>
+          </div>
+        ) : (
+          <p>No profile data available.</p>
+        )}
+
+        {/* ✅ Logout button */}
+        <button className="button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
     </div>
   );
 }
-
-export default Dashboard;

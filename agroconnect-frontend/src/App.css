@@ -1,53 +1,92 @@
+/* Global styles */
+:root {
+  --brand: #2e7d32;
+  --brand-dark: #1b5e20;
+  --bg: #f7faf7;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
 }
 
 .container {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 30px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Header layout */
+.header {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.brand {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 12px; /* pushes nav links below */
+}
+.nav {
+  display: flex;
+  flex-direction: column; /* stack links vertically */
+  gap: 8px;
+}
+.nav-link {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 600;
+}
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Card and form styling */
+.card {
   background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  padding: 20px;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+.label {
+  font-weight: 600;
+}
+.input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  outline: none;
 }
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+.input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(46,125,50,0.15);
 }
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #007bff;
+.button {
+  background: var(--brand);
   color: #fff;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-.dashboard {
-  max-width: 600px;
-  margin: 80px auto;
-  padding: 30px;
-  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
+.button:hover {
+  background: var(--brand-dark);
+}
+.message {
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+.error { color: #b00020; }
+.success { color: var(--brand); }

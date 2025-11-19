@@ -1,31 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { getProfile } from '../utils/api';
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-function Dashboard() {
-  const [user, setUser] = useState(null);
+export default function Dashboard() {
+  const { user, logout, loading } = useContext(AuthContext);
 
-  useEffect(() => {
-    async function fetchProfile() {
-      const res = await getProfile();
-      if (res.error) {
-        alert('Unauthorized, please login again');
-        window.location.href = '/login';
-      } else {
-        setUser(res);
-      }
-    }
-    fetchProfile();
-  }, []);
+  if (loading) return <p>Loading...</p>;
+
+  if (!user) return <p>You are not logged in.</p>;
 
   return (
-    <div>
-      {user ? (
-        <h1>Welcome, {user.name} ({user.email})</h1>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="container">
+      <div className="card">
+        <h2>Dashboard</h2>
+        <p><strong>Name:</strong> {user.name}</p>
+        <p><strong>Email:</strong> {user.email}</p>
+        <button className="button logout" onClick={logout}>Logout</button>
+      </div>
     </div>
   );
 }
-
-export default Dashboard;
