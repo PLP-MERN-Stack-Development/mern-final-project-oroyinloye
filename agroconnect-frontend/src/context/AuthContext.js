@@ -7,7 +7,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user profile if token exists
   useEffect(() => {
     async function fetchUser() {
       const token = localStorage.getItem("token");
@@ -29,7 +28,6 @@ export function AuthProvider({ children }) {
     fetchUser();
   }, []);
 
-  // Login: save token and fetch profile
   async function login(token) {
     localStorage.setItem("token", token);
     try {
@@ -41,7 +39,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Logout: clear token and user
   function logout() {
     localStorage.removeItem("token");
     setUser(null);

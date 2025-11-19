@@ -8,12 +8,9 @@ export default function Register() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  // ✅ Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
+    if (token) navigate("/dashboard");
   }, [navigate]);
 
   async function handleSubmit(e) {
@@ -21,12 +18,12 @@ export default function Register() {
     setLoading(true);
     setMessage("");
     try {
-      const data = await registerUser(form.name, form.email, form.password);
+      await registerUser(form.name, form.email, form.password);
       setMessage("✅ Registration successful!");
-      navigate("/login"); // after register, go to login
+      navigate("/login");
     } catch (err) {
       console.error(err);
-      setMessage("❌ Registration failed. Please try again.");
+      setMessage("❌ Registration failed.");
     } finally {
       setLoading(false);
     }
@@ -64,11 +61,7 @@ export default function Register() {
             {loading ? "Submitting..." : "Create account"}
           </button>
 
-          {message && (
-            <p className={`message ${message.includes("failed") ? "error" : "success"}`}>
-              {message}
-            </p>
-          )}
+          {message && <p className="message error">{message}</p>}
         </form>
       </div>
     </div>

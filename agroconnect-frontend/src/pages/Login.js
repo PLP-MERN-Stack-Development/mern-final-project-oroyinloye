@@ -10,12 +10,9 @@ export default function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // ✅ Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
+    if (token) navigate("/dashboard");
   }, [navigate]);
 
   async function handleSubmit(e) {
@@ -25,13 +22,12 @@ export default function Login() {
     try {
       const data = await loginUser(form.email, form.password);
       if (data.token) {
-        await login(data.token); // use AuthContext login
-        setMessage("✅ Login successful!");
-        navigate("/dashboard"); // redirect after login
+        await login(data.token);
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error(err);
-      setMessage("❌ Login failed. Please check your credentials.");
+      setMessage("❌ Login failed.");
     } finally {
       setLoading(false);
     }
@@ -62,11 +58,7 @@ export default function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          {message && (
-            <p className={`message ${message.includes("failed") ? "error" : "success"}`}>
-              {message}
-            </p>
-          )}
+          {message && <p className="message error">{message}</p>}
         </form>
       </div>
     </div>
