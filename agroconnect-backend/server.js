@@ -57,6 +57,9 @@ app.post("/api/products", async (req, res) => {
     res.status(400).json({ error: "Failed to add product" });
   }
 });
+app.get("/", (req, res) => {
+  res.send("AgroConnect Backend is running 🚀");
+});
 
 // Server listen
 const PORT = process.env.PORT || 5000;
