@@ -1,61 +1,65 @@
+// backend/routes/auth.js
 const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const authMiddleware = require("../middleware/auth");
+const router = express.Router();
+
+// Helper to sign token
+function signToken(user) {
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+  );
+}
 
 // Register
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
   try {
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    user = new User({ name, email, password: hashedPassword });
-    await user.save();
-    res.json({ message: "User registered successfully" });
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password)
+      return res.status(400).json({ error: "Name, email, and password are required" });
+
+    const existing = await User.findOne({ email });
+    if (existing) return res.status(409).json({ error: "Email already registered" });
+
+    const user = await User.create({ name, email, password });
+    const token = signToken(user);
+
+    res.status(201).json({
+      message: "User registered successfully",
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      token
+    });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Registration failed" });
   }
 });
 
 // Login
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: "Invalid credentials" });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: "Invalid credentials" });
-    }
-    const payload = { id: user.id, email: user.email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ message: "Login successful", token });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error: "Server error" });
-  }
-});
+    const { email, password } = req.body;
 
-// Profile
-router.get("/profile", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    res.json(user);
+    if (!email || !password)
+      return res.status(400).json({ error: "Email and password are required" });
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ error: "Invalid credentials" });
+
+    const match = await user.matchPassword(password);
+    if (!match) return res.status(401).json({ error: "Invalid credentials" });
+
+    const token = signToken(user);
+
+    res.json({
+      message: "Login successful",
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      token
+    });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Login failed" });
   }
 });
 

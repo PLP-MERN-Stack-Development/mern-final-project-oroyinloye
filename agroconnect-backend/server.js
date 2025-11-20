@@ -1,63 +1,45 @@
-// server.js
+// backend/server.js
+require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
-
-dotenv.config();
+const mongoose = require("mongoose");
+const path = require("path");
 
 const app = express();
 
 // Middleware
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
-app.use(cors());
 
-// MongoDB connection
+// Connect DB
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err.message));
 
-// Product schema
-const productSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    price: { type: Number, required: true },
-    location: { type: String, required: true },
-    imageUrl: { type: String },
-    phone: { type: String },
-    email: { type: String },
-  },
-  { timestamps: true }
-);
-
-const Product = mongoose.model("Product", productSchema);
+// Basic root route
+app.get("/", (req, res) => {
+  res.send("AgroConnect Backend is running 🚀");
+});
 
 // Routes
-app.get("/api/products", async (req, res) => {
-  try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
-  }
-});
+const authRoutes = require("./routes/auth");
+const dashboardRoutes = require("./routes/dashboard");
+const messagesRoutes = require("./routes/messages");
+app.use("/api/messages", messagesRoutes);
 
-app.post("/api/products", async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    const createdProduct = await product.save();
-    res.status(201).json(createdProduct);
-  } catch (error) {
-    res.status(400).json({ error: "Failed to add product" });
-  }
-});
+// Optional existing products route
+const productsRoutes = require("./routes/products"); // if you have it
 
-// Server listen
+app.use("/api/auth", authRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+if (productsRoutes) app.use("/api/products", productsRoutes);
+
+// Optional: serve frontend build in production
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
+// app.get("*", (req, res) =>
+//   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"))
+// );
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

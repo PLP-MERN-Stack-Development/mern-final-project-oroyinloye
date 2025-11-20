@@ -1,48 +1,88 @@
-// src/pages/Dashboard.js
+// frontend/src/pages/Dashboard.js
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "./Dashboard.css"; // import the matching CSS
 
 export default function Dashboard() {
-  const [profile, setProfile] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      toast.error("You must login to access the dashboard", { position: "top-right" });
+      setLoading(false);
+      return;
+    }
 
-    fetch("http://localhost:5000/api/auth/profile", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setProfile(data))
-      .catch(() => setProfile(null));
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/dashboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Failed to load dashboard");
+        }
+
+        setDashboardData(data);
+      } catch (err) {
+        toast.error(err.message, { position: "top-right" });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="container">
+        <div className="card">
+          <p>Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return (
+      <div className="container">
+        <div className="card">
+          <p>No dashboard data available.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
+      <h2 className="page-title">Dashboard</h2>
+      <p className="page-subtitle">Overview of your account</p>
+
       <div className="card">
-        <h2 className="page-title">Dashboard</h2>
-        <p className="page-subtitle">Your account overview</p>
+        <p><strong>Status:</strong> {dashboardData.message}</p>
+        <p><strong>User:</strong> {dashboardData.user.email}</p>
+        <p><strong>Role:</strong> {dashboardData.user.role}</p>
 
-        {profile ? (
-          <div className="grid">
-            <div className="card" style={{ background: "#eef2ff" }}>
-              <h3 className="page-title" style={{ fontSize: "1.1rem" }}>Profile</h3>
-              <div className="stack-2">
-                <div><strong>Name:</strong> {profile.name}</div>
-                <div><strong>Email:</strong> {profile.email}</div>
-              </div>
-            </div>
-
-            <div className="card" style={{ background: "#fef3c7" }}>
-              <h3 className="page-title" style={{ fontSize: "1.1rem" }}>Quick actions</h3>
-              <div style={{ display: "flex", gap: 12 }}>
-                <a href="/catalog" className="btn btn-primary">Browse catalog</a>
-                <a href="/add-product" className="btn btn-outline">Add a product</a>
-              </div>
-            </div>
+        {/* Stats grid */}
+        <div className="dashboard-stats">
+          <div className="stat-box">
+            <h4>Products</h4>
+            <p>{dashboardData.stats.productsCount}</p>
           </div>
-        ) : (
-          <p className="page-subtitle">Please login to view your profile.</p>
-        )}
+          <div className="stat-box">
+            <h4>Messages</h4>
+            <p>{dashboardData.stats.messagesCount}</p>
+          </div>
+          <div className="stat-box">
+            <h4>Last Login</h4>
+            <p>{new Date(dashboardData.stats.lastLogin).toLocaleString()}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

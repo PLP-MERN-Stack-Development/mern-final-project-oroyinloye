@@ -1,56 +1,64 @@
-// src/pages/Login.js
+// frontend/src/pages/Login.js
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Login() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
+    setLoading(true);
     try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(form)
       });
       const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        setMessage("Login successful!");
-      } else {
-        setMessage(data.error || "Login failed");
-      }
-    } catch {
-      setMessage("Server error");
+
+      if (!res.ok) throw new Error(data.error || "Login failed");
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      toast.success("Logged in successfully", { position: "bottom-center" });
+    } catch (err) {
+      toast.error(err.message, { position: "top-right" });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="container">
       <div className="card">
-        <h2 className="page-title">Welcome back</h2>
-        <p className="page-subtitle">Login to access your dashboard and manage listings.</p>
+        <h2 className="page-title">Login</h2>
+        <p className="page-subtitle">Access your account</p>
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-row">
             <label className="label" htmlFor="email">Email</label>
-            <input id="email" name="email" className="input" type="email" value={formData.email} onChange={handleChange} required />
+            <input
+              id="email" name="email" type="email" className="input"
+              value={form.email} onChange={handleChange} required
+            />
           </div>
+
           <div className="form-row">
             <label className="label" htmlFor="password">Password</label>
-            <input id="password" name="password" className="input" type="password" value={formData.password} onChange={handleChange} required />
+            <input
+              id="password" name="password" type="password" className="input"
+              value={form.password} onChange={handleChange} required
+            />
           </div>
 
-          <div style={{ display: "flex", gap: "12px" }}>
-            <button className="btn btn-primary" type="submit">Login</button>
-            <a href="/register" className="btn btn-outline">Create an account</a>
-          </div>
+          <button className="btn btn-primary" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
-
-        {message && <p className="page-subtitle" style={{ marginTop: 16 }}>{message}</p>}
       </div>
     </div>
   );
