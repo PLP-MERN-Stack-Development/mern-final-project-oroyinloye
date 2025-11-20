@@ -1,88 +1,28 @@
-// backend/routes/products.js
-const express = require("express");
-const Product = require("../models/Product");
-const auth = require("../middleware/auth"); // optional if you want protected routes
+// routes/product.js
+import express from "express";
+import Product from "../models/Product.js"; // make sure Product.js uses `export default`
+
 const router = express.Router();
 
-/**
- * GET /api/products
- * Fetch all products
- */
+// GET all products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find();
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
 
-/**
- * GET /api/products/:id
- * Fetch a single product by ID
- */
-router.get("/:id", async (req, res) => {
+// POST create a new product
+router.post("/", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ error: "Product not found" });
-    res.json(product);
+    const product = new Product(req.body);
+    await product.save();
+    res.status(201).json(product);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch product" });
+    res.status(400).json({ error: "Failed to create product" });
   }
 });
 
-/**
- * POST /api/products
- * Add a new product (protected)
- */
-router.post("/", auth, async (req, res) => {
-  try {
-    const { name, price, description, category, image } = req.body;
-
-    if (!name || !price) {
-      return res.status(400).json({ error: "Name and price are required" });
-    }
-
-    const product = await Product.create({
-      name,
-      price,
-      description,
-      category,
-      image,
-    });
-
-    res.status(201).json({ message: "Product created successfully", data: product });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to create product" });
-  }
-});
-
-/**
- * PUT /api/products/:id
- * Update a product (protected)
- */
-router.put("/:id", auth, async (req, res) => {
-  try {
-    const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updated) return res.status(404).json({ error: "Product not found" });
-    res.json({ message: "Product updated successfully", data: updated });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update product" });
-  }
-});
-
-/**
- * DELETE /api/products/:id
- * Delete a product (protected)
- */
-router.delete("/:id", auth, async (req, res) => {
-  try {
-    const deleted = await Product.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ error: "Product not found" });
-    res.json({ message: "Product deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to delete product" });
-  }
-});
-
-module.exports = router;
+export default router;
