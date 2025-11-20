@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
   res.send("AgroConnect Backend is running 🚀");
 });
 
+<<<<<<< HEAD
 // Routes
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
@@ -40,6 +41,20 @@ if (productsRoutes) app.use("/api/products", productsRoutes);
 // app.get("*", (req, res) =>
 //   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"))
 // );
+=======
+app.post("/api/products", async (req, res) => {
+  try {
+    const product = new Product(req.body);
+    const createdProduct = await product.save();
+    res.status(201).json(createdProduct);
+  } catch (error) {
+    res.status(400).json({ error: "Failed to add product" });
+  }
+});
+app.get("/", (req, res) => {
+  res.send("AgroConnect Backend is running 🚀");
+});
+>>>>>>> 7448f3519232526fbb22bc943153c68263cf1e28
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
