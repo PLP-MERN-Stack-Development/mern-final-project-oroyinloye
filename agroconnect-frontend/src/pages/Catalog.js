@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
-
+import "./Catalog.css";
 export default function Catalog() {
   const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);

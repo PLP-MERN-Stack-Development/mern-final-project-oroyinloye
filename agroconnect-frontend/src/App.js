@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import "./App.css";     // app-wide styles
 import Navbar from "./components/Navbar";   // ✅ points to components folder
 import Catalog from "./pages/Catalog";
 import ProductDetails from "./pages/ProductDetails";

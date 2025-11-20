@@ -1,5 +1,6 @@
 // frontend/src/pages/Register.js
 import React, { useState } from "react";
+import "./Register.css";
 import { toast } from "react-toastify";
 
 export default function Register() {
