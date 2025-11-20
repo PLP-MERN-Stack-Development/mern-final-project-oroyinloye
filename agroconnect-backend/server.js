@@ -3,7 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
 
 const app = express();
 
@@ -11,35 +10,29 @@ const app = express();
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 
-// Connect DB
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err.message));
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
-// Basic root route
+// Root route
 app.get("/", (req, res) => {
   res.send("AgroConnect Backend is running 🚀");
 });
 
-// Routes
+// Import routes
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const messagesRoutes = require("./routes/messages");
-app.use("/api/messages", messagesRoutes);
+const productsRoutes = require("./routes/products"); // ensure you have this file
 
-// Optional existing products route
-const productsRoutes = require("./routes/products"); // if you have it
-
+// Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-if (productsRoutes) app.use("/api/products", productsRoutes);
+app.use("/api/messages", messagesRoutes);
+app.use("/api/products", productsRoutes);
 
-// Optional: serve frontend build in production
-// app.use(express.static(path.join(__dirname, "../frontend/build")));
-// app.get("*", (req, res) =>
-//   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"))
-// );
-
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
