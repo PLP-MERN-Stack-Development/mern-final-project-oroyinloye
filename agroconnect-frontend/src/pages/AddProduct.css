@@ -1,0 +1,105 @@
+/* Container */
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card wrapper */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 25px;
+}
+
+/* Page titles */
+.page-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+/* Form layout */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #34495e;
+}
+
+/* Inputs */
+.input,
+.textarea {
+  padding: 10px 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 6px rgba(52, 152, 219, 0.3);
+  outline: none;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Button */
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .card {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
