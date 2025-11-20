@@ -1,29 +1,50 @@
-import React from "react";
-import { useApi } from "../hooks/useApi";   // ✅ import the hook
-import { toast } from "react-toastify";
-import "./Catalog.css";
+import React, { useEffect, useState, useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export default function Catalog() {
-  const { data: products, loading, error } = useApi("/api/products");
+  const [products, setProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
 
-  if (loading) return <p>Loading products...</p>;
-  if (error) {
-    toast.error(error);
-    return <p>Failed to load products.</p>;
-  }
+  useEffect(() => {
+  fetch(`${process.env.REACT_APP_API_URL}/api/products`)
+    .then((res) => res.json())
+    .then((data) => setProducts(data))
+    .catch((err) => console.error("Error fetching products:", err));
+}, []);
 
-  if (!products || products.length === 0) {
-    return <p>No products available.</p>;
-  }
 
   return (
-    <div className="catalog-grid">
-      {products.map((p) => (
-        <div className="card" key={p._id}>
-          <h3>{p.name}</h3>
-          <p>₦{p.price}</p>
-        </div>
-      ))}
+    <div style={{ padding: "20px" }}>
+      <h2>Catalog</h2>
+      {products.length === 0 ? (
+        <p>No products available.</p>
+      ) : (
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          {products.map((p) => (
+            <li
+              key={p._id}
+              style={{
+                marginBottom: "15px",
+                padding: "10px",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+              }}
+            >
+              <strong>{p.name}</strong> — ${p.price}
+              <button
+                style={{
+                  marginLeft: "10px",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                }}
+                onClick={() => addToCart(p)}
+              >
+                Add to Cart
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

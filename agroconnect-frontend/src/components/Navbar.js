@@ -1,43 +1,22 @@
-// src/components/Navbar.js
-import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import "./Navbar.css";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isAuthenticated = !!localStorage.getItem("token");
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+  const { cart } = useContext(CartContext);
 
   return (
-    <nav className="navbar">
-      <div className="navbar-inner">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-logo" />
-          <span className="brand-name">Agroconnect</span>
-        </Link>
+    <nav style={{ padding: "10px 20px", borderBottom: "1px solid #eee" }}>
+      <Link to="/" style={{ marginRight: 10 }}>Home</Link>
+      <Link to="/catalog" style={{ marginRight: 10 }}>Catalog</Link>
+      <Link to="/dashboard" style={{ marginRight: 10 }}>Dashboard</Link>
+      <Link to="/messages" style={{ marginRight: 10 }}>Messages</Link>
+      <Link to="/register" style={{ marginRight: 10 }}>Register</Link>
+      <Link to="/login" style={{ marginRight: 10 }}>Login</Link>
 
-        <ul className="navbar-menu">
-          <li><Link to="/dashboard" className="navbar-link">Dashboard</Link></li>
-          {!isAuthenticated && (
-            <>
-              <li><Link to="/catalog" className="navbar-link">Catalog</Link></li>
-              <li><Link to="/register" className="navbar-link">Register</Link></li>
-              <li><Link to="/login" className="navbar-link">Login</Link></li>
-            </>
-          )}
-          {isAuthenticated && (
-            <>
-              <li><Link to="/catalog" className="navbar-link">Catalog</Link></li>
-              <li><button onClick={handleLogout} className="navbar-link">Logout</button></li>
-            </>
-          )}
-        </ul>
-      </div>
+      <Link to="/cart" style={{ marginLeft: "auto", fontWeight: "bold" }}>
+        Cart ({cart.length})
+      </Link>
     </nav>
   );
 }
