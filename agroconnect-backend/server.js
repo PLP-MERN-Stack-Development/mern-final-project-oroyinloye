@@ -1,9 +1,10 @@
 // backend/server.js
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+import dotenv from "dotenv";
+dotenv.config();
 
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 const app = express();
 
 // Middleware
