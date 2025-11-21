@@ -1,30 +1,33 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import "./App.css";     // app-wide styles
-import Navbar from "./components/Navbar";   // ✅ points to components folder
-import Catalog from "./pages/Catalog";
-import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/Cart";
-import Dashboard from "./pages/Dashboard";
-import Messages from "./pages/Messages";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";       // create a simple Home.js if not already
+import Catalog from "./pages/Catalog"; // your existing Catalog page
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
 
-export default function App() {
+function App() {
   return (
-    <>
-      <Navbar />
+    <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/catalog" element={<Catalog />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/messages" element={<Messages />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        {/* 🔒 Protected route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-    </>
+    </Router>
   );
 }
+
+export default App;

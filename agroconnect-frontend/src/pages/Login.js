@@ -1,65 +1,52 @@
-// frontend/src/pages/Login.js
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 
-export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || "Login failed");
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      toast.success("Logged in successfully", { position: "bottom-center" });
+      if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("Login successful!");
+        window.location.href = "/dashboard"; // redirect after login
+      } else {
+        alert(data.error || "Login failed");
+      }
     } catch (err) {
-      toast.error(err.message, { position: "top-right" });
-    } finally {
-      setLoading(false);
+      console.error(err);
+      alert("Login failed");
     }
   };
 
   return (
-    <div className="container">
-      <div className="card">
-        <h2 className="page-title">Login</h2>
-        <p className="page-subtitle">Access your account</p>
-
-        <form className="form" onSubmit={handleSubmit}>
-          <div className="form-row">
-            <label className="label" htmlFor="email">Email</label>
-            <input
-              id="email" name="email" type="email" className="input"
-              value={form.email} onChange={handleChange} required
-            />
-          </div>
-
-          <div className="form-row">
-            <label className="label" htmlFor="password">Password</label>
-            <input
-              id="password" name="password" type="password" className="input"
-              value={form.password} onChange={handleChange} required
-            />
-          </div>
-
-          <button className="btn btn-primary" type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h2>Login</h2>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Login</button>
+    </form>
   );
 }
+
+export default Login;
