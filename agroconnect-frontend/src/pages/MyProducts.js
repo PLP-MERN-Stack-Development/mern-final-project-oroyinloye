@@ -124,6 +124,11 @@ function MyProducts() {
                 </div>
               ) : (
                 <>
+      <img
+      src={`${process.env.REACT_APP_API_URL}${product.imageUrl}`}
+      alt={product.name}
+      style={{ width: "100%", borderRadius: "8px", marginBottom: "10px" }}
+    />           
                   <h3>{product.name}</h3>
                   <p>Price: ₦{product.price}</p>
                   <p>{product.description}</p>
