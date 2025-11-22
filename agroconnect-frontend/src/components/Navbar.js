@@ -1,45 +1,47 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import CartContext from "../context/CartContext";
 import AuthContext from "../context/AuthContext";
 
 function Navbar() {
-  const { cartItems } = useContext(CartContext);
   const { user, logout } = useContext(AuthContext);
 
   return (
     <nav style={styles.nav}>
-      <h2>AgroConnect</h2>
-      <ul style={styles.ul}>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/catalog">Catalog</Link></li>
-        <li><Link to="/cart">Cart ({cartItems.length})</Link></li>
-
-        {!user && (
-          <>
-            <li><Link to="/register">Register</Link></li>
-            <li><Link to="/login">Login</Link></li>
-          </>
-        )}
-
+      <h2 style={styles.logo}>AgroConnect</h2>
+      <div style={styles.links}>
+        <Link to="/" style={styles.link}>Home</Link>
+        <Link to="/catalog" style={styles.link}>Catalog</Link>
+        <Link to="/cart" style={styles.link}>Cart</Link>
+        {!user && <Link to="/register" style={styles.link}>Register</Link>}
+        {!user && <Link to="/login" style={styles.link}>Login</Link>}
+        {user && <Link to="/dashboard" style={styles.link}>Dashboard</Link>}
         {user && (
-          <>
-            <li><Link to="/dashboard">Dashboard</Link></li>
-            <li>
-              <button onClick={logout} style={styles.logout}>Logout</button>
-            </li>
-            <li style={{ fontStyle: "italic" }}>Welcome, {user.name}</li>
-          </>
+          <button onClick={logout} style={styles.logout}>Logout</button>
         )}
-      </ul>
+      </div>
     </nav>
   );
 }
 
 const styles = {
-  nav: { display: "flex", justifyContent: "space-between", padding: "10px 20px", backgroundColor: "#2e7d32", color: "#fff" },
-  ul: { listStyle: "none", display: "flex", gap: "15px", margin: 0, padding: 0 },
-  logout: { background: "transparent", border: "none", color: "#fff", cursor: "pointer" },
+  nav: {
+    backgroundColor: "#2e7d32", // green background
+    padding: "15px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  logo: { color: "#fff", margin: 0 },
+  links: { display: "flex", gap: "15px" },
+  link: { color: "#fff", textDecoration: "none", fontWeight: "bold" }, // ✅ white links
+  logout: {
+    backgroundColor: "#c62828",
+    color: "#fff",
+    border: "none",
+    padding: "8px 12px",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
 };
 
 export default Navbar;
