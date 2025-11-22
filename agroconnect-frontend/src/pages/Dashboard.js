@@ -5,7 +5,7 @@ function Dashboard() {
   const { user } = useContext(AuthContext);
 
   if (!user) {
-    return <h2>Please log in to view your dashboard.</h2>;
+    return <h2 style={{ textAlign: "center", marginTop: "50px" }}>Please log in to view your dashboard.</h2>;
   }
 
   return (
@@ -13,7 +13,6 @@ function Dashboard() {
       <h2>Welcome back, {user.name}!</h2>
       <p>Email: {user.email}</p>
       <p>User ID: {user.id}</p>
-      {/* You can expand with more personalized content here */}
     </div>
   );
 }

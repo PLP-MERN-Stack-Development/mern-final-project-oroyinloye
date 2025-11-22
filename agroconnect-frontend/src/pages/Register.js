@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 function Register() {
@@ -6,12 +7,13 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { register } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -20,9 +22,9 @@ function Register() {
       const data = await res.json();
 
       if (res.ok && data.user) {
-        register(data.user); // ✅ update context + localStorage
+        register(data.user); // update AuthContext
         alert("Registration successful!");
-        window.location.href = "/dashboard";
+        navigate("/dashboard"); // ✅ safe React Router redirect
       } else {
         alert(data.message || "Registration failed");
       }
@@ -33,16 +35,22 @@ function Register() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
+    <div style={styles.container}>
       <h2>Register</h2>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <form onSubmit={handleSubmit} style={styles.form}>
         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit" style={{ padding: "10px", backgroundColor: "#2e7d32", color: "#fff", border: "none" }}>Register</button>
+        <button type="submit" style={styles.button}>Register</button>
       </form>
     </div>
   );
 }
+
+const styles = {
+  container: { maxWidth: "400px", margin: "50px auto", textAlign: "center" },
+  form: { display: "flex", flexDirection: "column", gap: "10px" },
+  button: { padding: "10px", backgroundColor: "#2e7d32", color: "#fff", border: "none" },
+};
 
 export default Register;
