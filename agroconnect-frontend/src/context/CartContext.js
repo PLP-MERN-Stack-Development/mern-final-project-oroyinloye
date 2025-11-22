@@ -1,18 +1,23 @@
-// src/context/CartContext.js
 import React, { createContext, useState } from "react";
 
-export const CartContext = createContext();
+const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (item) => setCart([...cart, item]);
-  const removeFromCart = (id) =>
-    setCart(cart.filter((item) => item._id !== id));
+  const addToCart = (item) => {
+    setCartItems((prev) => [...prev, item]);
+  };
+
+  const removeFromCart = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
 }
+
+export default CartContext;

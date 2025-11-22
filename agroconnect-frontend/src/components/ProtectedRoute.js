@@ -2,14 +2,21 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const storedUser = localStorage.getItem("user");
+  let user = null;
+
+  if (storedUser && storedUser !== "undefined") {
+    try {
+      user = JSON.parse(storedUser);
+    } catch (err) {
+      console.error("Error parsing user:", err);
+    }
+  }
 
   if (!user) {
-    // 🚫 Not logged in → redirect to login
     return <Navigate to="/login" replace />;
   }
 
-  // ✅ Logged in → show the protected page
   return children;
 }
 

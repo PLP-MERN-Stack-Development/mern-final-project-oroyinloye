@@ -1,22 +1,24 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";       // create a simple Home.js if not already
-import Catalog from "./pages/Catalog"; // your existing Catalog page
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import Cart from "./pages/Cart";
+
 
 function App() {
   return (
-    <Router>
+    <>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-
-        {/* 🔒 Protected route */}
+        <Route path="/cart" element={<Cart />} />
         <Route
           path="/dashboard"
           element={
@@ -26,7 +28,7 @@ function App() {
           }
         />
       </Routes>
-    </Router>
+    </>
   );
 }
 

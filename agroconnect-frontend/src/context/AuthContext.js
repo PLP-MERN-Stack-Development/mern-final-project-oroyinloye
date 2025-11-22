@@ -1,52 +1,42 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProfile } from "../utils/api";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
+  // Load user from localStorage on app start
   useEffect(() => {
-    async function fetchUser() {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && storedUser !== "undefined") {
       try {
-        const data = await getProfile();
-        setUser(data);
+        setUser(JSON.parse(storedUser));
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
-        localStorage.removeItem("token");
-        setUser(null);
-      } finally {
-        setLoading(false);
+        console.error("Error parsing user:", err);
       }
     }
-    fetchUser();
   }, []);
 
-  async function login(token) {
-    localStorage.setItem("token", token);
-    try {
-      const data = await getProfile();
-      setUser(data);
-    } catch (err) {
-      console.error("Login failed:", err);
-      logout();
-    }
-  }
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
 
-  function logout() {
-    localStorage.removeItem("token");
+  const register = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  const logout = () => {
     setUser(null);
-  }
+    localStorage.removeItem("user");
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
+export default AuthContext;

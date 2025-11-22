@@ -1,50 +1,28 @@
-import React, { useEffect, useState, useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import "./Catalog.css";
-export default function Catalog() {
-  const [products, setProducts] = useState([]);
+import React, { useContext } from "react";
+import CartContext from "../context/CartContext";
+
+function Catalog() {
   const { addToCart } = useContext(CartContext);
 
-  useEffect(() => {
-  fetch(`${process.env.REACT_APP_API_URL}/api/products`)
-    .then((res) => res.json())
-    .then((data) => setProducts(data))
-    .catch((err) => console.error("Error fetching products:", err));
-}, []);
-
+  const products = [
+    { id: 1, name: "Maize", price: 100 },
+    { id: 2, name: "Rice", price: 200 },
+    { id: 3, name: "Beans", price: 150 },
+  ];
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <h2>Catalog</h2>
-      {products.length === 0 ? (
-        <p>No products available.</p>
-      ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {products.map((p) => (
-            <li
-              key={p._id}
-              style={{
-                marginBottom: "15px",
-                padding: "10px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-              }}
-            >
-              <strong>{p.name}</strong> — ${p.price}
-              <button
-                style={{
-                  marginLeft: "10px",
-                  padding: "5px 10px",
-                  cursor: "pointer",
-                }}
-                onClick={() => addToCart(p)}
-              >
-                Add to Cart
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {products.map((p) => (
+          <li key={p.id}>
+            {p.name} - ₦{p.price}
+            <button onClick={() => addToCart(p)}>Add to Cart</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
+
+export default Catalog;

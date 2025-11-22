@@ -1,34 +1,20 @@
-// src/pages/Cart.js
 import React, { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import CartContext from "../context/CartContext";
 
-export default function Cart() {
-  const { cart, removeFromCart } = useContext(CartContext);
+function Cart() {
+  const { cartItems, removeFromCart } = useContext(CartContext);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <h2>Your Cart</h2>
-      {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
+      {cartItems.length === 0 ? (
+        <p>No items in cart yet.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {cart.map((item) => (
-            <li
-              key={item._id}
-              style={{
-                marginBottom: "15px",
-                padding: "10px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-              }}
-            >
-              <strong>{item.name}</strong> — ${item.price}
-              <button
-                style={{ marginLeft: "10px", padding: "5px 10px" }}
-                onClick={() => removeFromCart(item._id)}
-              >
-                Remove
-              </button>
+        <ul>
+          {cartItems.map((item, index) => (
+            <li key={index}>
+              {item.name} - ₦{item.price}
+              <button onClick={() => removeFromCart(item.id)}>Remove</button>
             </li>
           ))}
         </ul>
@@ -36,3 +22,5 @@ export default function Cart() {
     </div>
   );
 }
+
+export default Cart;

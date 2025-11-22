@@ -1,26 +1,33 @@
-import React from "react";
+import React, { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 function Dashboard() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useContext(AuthContext);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-  };
+  if (!user) {
+    return <h2>Please log in to view your dashboard.</h2>;
+  }
 
   return (
-    <div>
-      <h2>Dashboard</h2>
-      {user ? (
-        <>
-          <p>Welcome back, {user.name}!</p>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <p>No user logged in</p>
-      )}
+    <div style={styles.container}>
+      <h2>Welcome back, {user.name}!</h2>
+      <p>Email: {user.email}</p>
+      <p>User ID: {user.id}</p>
+      {/* You can expand with more personalized content here */}
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "600px",
+    margin: "50px auto",
+    textAlign: "center",
+    padding: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    backgroundColor: "#f9f9f9",
+  },
+};
 
 export default Dashboard;
