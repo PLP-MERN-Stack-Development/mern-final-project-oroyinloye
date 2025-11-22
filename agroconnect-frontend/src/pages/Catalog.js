@@ -1,8 +1,15 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import CartContext from "../context/CartContext";
 
 function Catalog() {
   const { addToCart } = useContext(CartContext);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/api/products`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Fetch products error:", err));
+  }, []);
 
   // Example product list (you can replace with API data later)
   const products = [
@@ -31,8 +38,8 @@ function Catalog() {
             <p>Price: ₦{product.price}</p>
             <div style={styles.actions}>
               <button onClick={() => addToCart(product)} style={styles.button}>Add to Cart</button>
-              <button onClick={() => contactFarmerEmail(product.farmer)} style={styles.button}>Email Farmer</button>
-              <button onClick={() => contactFarmerSMS(product.phone)} style={styles.button}>SMS Farmer</button>
+              <button onClick={() => contactFarmerEmail(product.farmerEmail)} style={styles.button}>Email Farmer</button>
+              <button onClick={() => contactFarmerSMS(product.farmerPhone)} style={styles.button}>SMS Farmer</button>
             </div>
           </div>
         ))}
